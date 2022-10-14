@@ -44,14 +44,14 @@ final class MovieQuizViewController: UIViewController {
         let questNumber: String
     }
     
-    @IBAction func yesButtonClicked(_ sender: UIButton) {
+    @IBAction private func  yesButtonClicked(_ sender: UIButton) {
         let currentQuestion = questions[currentQuestionIndex]
         let givenAnswer = true
         showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
         toogleDisableButtons()
     }
     
-    @IBAction func noButtonClicked(_ sender: UIButton) {
+    @IBAction private func noButtonClicked(_ sender: UIButton) {
         let currentQuestion = questions[currentQuestionIndex]
         let givenAnswer = false
         showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
