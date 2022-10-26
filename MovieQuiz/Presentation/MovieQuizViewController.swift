@@ -13,15 +13,15 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate{
     private let questionsAmount: Int = 10
     private var questionFactory: QuestionFactoryProtocol?
     private var currentQuestion: QuizQuestion?
-    private var statisticService = StatisticServiceImplementation()
+    private var statisticService: StatisticService?
     private var alertPresent: AlertPresenterProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(NSHomeDirectory())
         questionFactory = QuestionFactory(delegate: self)
-        questionFactory?.requestNextQuestion()
         alertPresent = AlertPresenter(delegate: self)
+        statisticService = StatisticServiceImplementation(delegate: self)
+        questionFactory?.requestNextQuestion()
     }
     
     func didReceiveNextQuestion(question: QuizQuestion?) {
@@ -30,8 +30,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate{
         }
         currentQuestion = question
         let viewModel = convert(model: question)
-        DispatchQueue.main.async {
-            [weak self] in self?.show(quiz: viewModel)
+        DispatchQueue.main.async { [weak self] in
+            self?.show(quiz: viewModel)
         }
     }
     
@@ -55,11 +55,11 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate{
     
     private func showNextQuestionOrResult() {
         if currentQuestionIndex == questionsAmount - 1 {
-            statisticService.store(correct: correctAnswer, total: questionsAmount)
+            statisticService?.store(correct: correctAnswer, total: questionsAmount)
             let result = "Ваш результат: \(correctAnswer) из \(questionsAmount)"
-            let gamesCount = "Количество сыгранных квизов: \(statisticService.gamesCount)"
-            let record = "Рекорд: \(statisticService.bestGame.correct)/\(questionsAmount) (\(statisticService.bestGame.date.dateTimeString))"
-            let totalAccuracy = "Средняя точность: \(String(format: "%.2f", statisticService.totalAccuracy * 100))%"
+            let gamesCount = "Количество сыгранных квизов: \(statisticService!.gamesCount)"
+            let record = "Рекорд: \(statisticService!.bestGame.correct)/\(questionsAmount) (\(statisticService!.bestGame.date.dateTimeString))"
+            let totalAccuracy = "Средняя точность: \(String(format: "%.2f", statisticService!.totalAccuracy * 100.0))%"
             let mockedAlertModel: AlertModel = {
                 AlertModel(
                     title: "Этот раунд окончен!",
