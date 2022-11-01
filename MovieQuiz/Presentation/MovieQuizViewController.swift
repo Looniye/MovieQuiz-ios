@@ -1,27 +1,29 @@
 import UIKit
 
-final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate{
+final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, MoviesLoading{
     
     @IBOutlet private var imageView: UIImageView!
     @IBOutlet private var textLabel: UILabel!
     @IBOutlet private var counterLabel: UILabel!
     @IBOutlet private var yesButton: UIButton!
     @IBOutlet private var noButton: UIButton!
+    @IBOutlet var activityIndicator: UIActivityIndicatorView!
     
     private var currentQuestionIndex: Int = 0
     private var correctAnswer: Int = 0
     private let questionsAmount: Int = 10
     private var questionFactory: QuestionFactoryProtocol?
     private var currentQuestion: QuizQuestion?
-    private var statisticService: StatisticService?
+    private var statisticService: StatisticService!
     private var alertPresent: AlertPresenterProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        questionFactory = QuestionFactory(delegate: self)
+        questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
         alertPresent = AlertPresenter(delegate: self)
         statisticService = StatisticServiceImplementation(delegate: self)
-        questionFactory?.requestNextQuestion()
+        questionFactory?.loadData()
+        showLoadingIndicator()
     }
     
     func didReceiveNextQuestion(question: QuizQuestion?) {
@@ -55,17 +57,18 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate{
     
     private func showNextQuestionOrResult() {
         if currentQuestionIndex == questionsAmount - 1 {
-            statisticService?.store(correct: correctAnswer, total: questionsAmount)
+            statisticService.store(correct: correctAnswer, total: questionsAmount)
             let result = "Ваш результат: \(correctAnswer) из \(questionsAmount)"
-            let gamesCount = "Количество сыгранных квизов: \(statisticService!.gamesCount)"
-            let record = "Рекорд: \(statisticService!.bestGame.correct)/\(questionsAmount) (\(statisticService!.bestGame.date.dateTimeString))"
-            let totalAccuracy = "Средняя точность: \(String(format: "%.2f", statisticService!.totalAccuracy * 100.0))%"
+            let gamesCount = "Количество сыгранных квизов: \(statisticService.gamesCount)"
+            let record = "Рекорд: \(statisticService.bestGame.correct)/\(questionsAmount) (\(statisticService.bestGame.date.dateTimeString))"
+            let totalAccuracy = "Средняя точность: \(String(format: "%.2f", statisticService.totalAccuracy * 100.0))%"
             let mockedAlertModel: AlertModel = {
                 AlertModel(
                     title: "Этот раунд окончен!",
                     message: "\(result) \n \(gamesCount) \n \(record) \n \(totalAccuracy)",
                     buttonText: "Сыграть ещё раз",
-                    completion: {
+                    completion: { [weak self] in
+                        guard let self = self else { return }
                         self.currentQuestionIndex = 0
                         self.correctAnswer = 0
                         return self.questionFactory?.requestNextQuestion()
@@ -96,7 +99,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate{
             self.toggleEnableButtons()
         }
     }
-    
+
     private func toggleDisableButtons() {
         yesButton.isEnabled = false
         noButton.isEnabled = false
@@ -115,8 +118,52 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate{
     
     private func convert(model: QuizQuestion) -> QuizStepViewModel {
         return QuizStepViewModel(
-            image: UIImage(named: model.image) ?? UIImage(),
+            image: UIImage(data: model.image) ?? UIImage(),
             question: model.text,
             questNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)")
     }
+    
+    private func showLoadingIndicator() {
+        activityIndicator.isHidden = false
+        activityIndicator.startAnimating()
+    }
+    
+    private func hideLoadingIndicator() {
+        activityIndicator.isHidden = true
+        activityIndicator.stopAnimating()
+    }
+    
+    private func showNetworkError(message: String) {
+        DispatchQueue.main.async { [weak self] in
+            self?.hideLoadingIndicator()
+            let alertError: AlertModel = {
+                AlertModel(
+                    title: "Ошибка",
+                    message: "Картинка не загрузилась",
+                    buttonText: "Попробовать ещё раз",
+                    completion: { [weak self] in
+                        guard let self = self else { return }
+                        self.currentQuestionIndex = 0
+                        self.correctAnswer = 0
+                        return self.questionFactory?.loadData()
+                    }
+                )
+            }()
+            self?.alertPresent?.showAlert(quiz: alertError)
+        }
+    }
+    
+    func didLoadDataFromServer() {
+        activityIndicator.isHidden = true
+        questionFactory?.requestNextQuestion()
+    }
+    
+    func didFailToLoadData(with error: Error) {
+        showNetworkError(message: error.localizedDescription)
+    }
+    
+    func loadMovies(handler: @escaping (Result<MostPopularMovies, Error>) -> Void) {
+        
+    }
+    
 }
