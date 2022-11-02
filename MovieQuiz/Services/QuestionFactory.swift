@@ -51,10 +51,7 @@ class QuestionFactory: QuestionFactoryProtocol{
                     self.delegate?.didLoadDataFromServer()
                 case .failure(let error):
                     self.delegate?.didFailToLoadData(with: error)
-                
-                    
                 }
-                
             }
         }
     }
@@ -73,6 +70,7 @@ class QuestionFactory: QuestionFactoryProtocol{
             } catch {
                 print("Failed to load image")
                 self.delegate?.didFailToLoadData(with: error)
+                return
             }
             let rating = Float(movie.rating) ?? 0
             
@@ -87,5 +85,3 @@ class QuestionFactory: QuestionFactoryProtocol{
         }
     }
 }
-
-

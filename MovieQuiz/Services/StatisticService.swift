@@ -15,12 +15,6 @@ struct GameRecord: Codable {
 
 final class StatisticServiceImplementation: StatisticService {
     
-    weak var delegate: MovieQuizViewController?
-    
-    init(delegate: MovieQuizViewController?) {
-        self.delegate = delegate
-    }
-    
     private enum Keys: String {
         case correct, total, bestGame, gamesCount, currentGame, accuracy
     }
@@ -60,7 +54,6 @@ final class StatisticServiceImplementation: StatisticService {
             }
             userDefaults.set(data, forKey: Keys.bestGame.rawValue)
         }
-        
     }
     
     func store(correct count: Int, total amount: Int) {
@@ -76,4 +69,3 @@ final class StatisticServiceImplementation: StatisticService {
         }
     }
 }
-

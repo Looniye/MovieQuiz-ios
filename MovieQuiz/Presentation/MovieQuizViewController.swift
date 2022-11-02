@@ -1,13 +1,13 @@
 import UIKit
 
-final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, MoviesLoading{
+final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate{
     
     @IBOutlet private var imageView: UIImageView!
     @IBOutlet private var textLabel: UILabel!
     @IBOutlet private var counterLabel: UILabel!
     @IBOutlet private var yesButton: UIButton!
     @IBOutlet private var noButton: UIButton!
-    @IBOutlet var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet private var activityIndicator: UIActivityIndicatorView!
     
     private var currentQuestionIndex: Int = 0
     private var correctAnswer: Int = 0
@@ -21,7 +21,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
         super.viewDidLoad()
         questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
         alertPresent = AlertPresenter(delegate: self)
-        statisticService = StatisticServiceImplementation(delegate: self)
+        statisticService = StatisticServiceImplementation()
         questionFactory?.loadData()
         showLoadingIndicator()
     }
@@ -99,7 +99,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
             self.toggleEnableButtons()
         }
     }
-
+    
     private func toggleDisableButtons() {
         yesButton.isEnabled = false
         noButton.isEnabled = false
@@ -154,16 +154,11 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
     }
     
     func didLoadDataFromServer() {
-        activityIndicator.isHidden = true
+        hideLoadingIndicator()
         questionFactory?.requestNextQuestion()
     }
     
     func didFailToLoadData(with error: Error) {
         showNetworkError(message: error.localizedDescription)
     }
-    
-    func loadMovies(handler: @escaping (Result<MostPopularMovies, Error>) -> Void) {
-        
-    }
-    
 }

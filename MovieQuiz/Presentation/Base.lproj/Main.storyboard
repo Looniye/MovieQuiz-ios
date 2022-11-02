@@ -45,7 +45,7 @@
                                         </subviews>
                                     </stackView>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="QXX-s1-1sk" userLabel="Preview Image">
-                                        <rect key="frame" x="0.0" y="38.5" width="374" height="561"/>
+                                        <rect key="frame" x="0.0" y="38.5" width="283" height="424.5"/>
                                         <color key="backgroundColor" name="white"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="QXX-s1-1sk" secondAttribute="height" multiplier="2:3" id="vCm-53-Zp7"/>
@@ -57,10 +57,10 @@
                                         </userDefinedRuntimeAttributes>
                                     </imageView>
                                     <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="R5V-ev-cvy" userLabel="View Question Label">
-                                        <rect key="frame" x="0.0" y="614.5" width="374" height="114.5"/>
+                                        <rect key="frame" x="0.0" y="478" width="374" height="251"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Рейтинг этого фильма меньше, чем 5?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K6b-E2-4rR" userLabel="Question Label">
-                                                <rect key="frame" x="20" y="5" width="334" height="104.5"/>
+                                                <rect key="frame" x="20" y="5" width="334" height="241"/>
                                                 <fontDescription key="fontDescription" name="YSDisplay-Bold" family="YS Display" pointSize="23"/>
                                                 <color key="textColor" name="white"/>
                                                 <nil key="highlightedColor"/>
@@ -123,9 +123,9 @@
                                     </stackView>
                                 </subviews>
                             </stackView>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="XpE-bf-1l3">
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="XpE-bf-1l3">
                                 <rect key="frame" x="197" y="438" width="20" height="20"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="color" name="darkGray"/>
                             </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="DgB-UD-kCq"/>
@@ -133,7 +133,9 @@
                         <constraints>
                             <constraint firstItem="AW2-6j-xFc" firstAttribute="top" secondItem="DgB-UD-kCq" secondAttribute="top" constant="10" id="3L0-WZ-QGX"/>
                             <constraint firstItem="DgB-UD-kCq" firstAttribute="bottom" secondItem="AW2-6j-xFc" secondAttribute="bottom" id="Imi-9v-c4p"/>
+                            <constraint firstItem="XpE-bf-1l3" firstAttribute="centerY" secondItem="AV5-xj-gt6" secondAttribute="centerY" id="Mr0-Fz-fDf"/>
                             <constraint firstItem="AW2-6j-xFc" firstAttribute="leading" secondItem="DgB-UD-kCq" secondAttribute="leading" constant="20" id="SQ3-DD-5kU"/>
+                            <constraint firstItem="XpE-bf-1l3" firstAttribute="centerX" secondItem="AV5-xj-gt6" secondAttribute="centerX" id="aPE-Qe-Nwf"/>
                             <constraint firstItem="DgB-UD-kCq" firstAttribute="trailing" secondItem="8SE-q5-Z28" secondAttribute="trailing" constant="20" id="bMK-bS-H8Z"/>
                             <constraint firstItem="DgB-UD-kCq" firstAttribute="trailing" secondItem="R5V-ev-cvy" secondAttribute="trailing" constant="20" id="kZT-ah-6cD"/>
                             <constraint firstItem="DgB-UD-kCq" firstAttribute="trailing" secondItem="B5V-sg-mN6" secondAttribute="trailing" constant="20" id="mSs-qy-3Mu"/>
@@ -158,6 +160,9 @@
     <resources>
         <namedColor name="black">
             <color red="0.10199999809265137" green="0.10599999874830246" blue="0.13300000131130219" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="darkGray">
+            <color red="0.10199999809265137" green="0.10599999874830246" blue="0.13300000131130219" alpha="0.60500001907348633" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="white">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
