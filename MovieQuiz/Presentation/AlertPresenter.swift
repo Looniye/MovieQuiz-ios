@@ -1,11 +1,10 @@
 import Foundation
 import UIKit
 
+
 class AlertPresenter: AlertPresenterProtocol{
-    
     weak var delegate: UIViewController?
-    
-    init(delegate: UIViewController?) {
+    init(delegate: UIViewController) {
         self.delegate = delegate
     }
     
@@ -22,6 +21,7 @@ class AlertPresenter: AlertPresenterProtocol{
                 model.completion()
             }
         ))
+        alert.view.accessibilityIdentifier = "Game results"
         delegate?.present(alert, animated: true)
     }
 }
