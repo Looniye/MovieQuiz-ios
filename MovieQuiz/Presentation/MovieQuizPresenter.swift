@@ -113,8 +113,6 @@ final class MovieQuizPresenter: QuestionFactoryDelegate  {
     func makeResultsMessage() -> String {
         statisticService.store(correct: self.correctAnswer, total: self.questionsAmount)
         
-        let bestGame = statisticService.bestGame
-        
         let result = "Ваш результат: \(self.correctAnswer) из \(self.questionsAmount)"
         let gamesCount = "Количество сыгранных квизов: \(statisticService.gamesCount)"
         let record = "Рекорд: \(statisticService.bestGame.correct)/\(self.questionsAmount) (\(statisticService.bestGame.date.dateTimeString))"
