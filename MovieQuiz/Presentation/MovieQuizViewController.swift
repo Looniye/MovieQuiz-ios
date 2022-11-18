@@ -80,21 +80,17 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
     func show(quiz result: QuizResultsViewModel) {
         let message = presenter.makeResultsMessage()
         
-        let alert = UIAlertController(
-            title: result.title,
-            message: message,
-            preferredStyle: .alert)
-        
-        let action = UIAlertAction(title: result.buttonText, style: .default) { [weak self] _ in
-            guard let self = self else { return }
-            
-            self.presenter.restartGame()
-        }
-        
-        alert.addAction(action)
-        
-        self.present(alert, animated: true, completion: nil)
-        
-        alert.view.accessibilityIdentifier = "Game results"
+        let mockedAlertModel: AlertModel = {
+            AlertModel(
+                title: result.title,
+                message: message,
+                buttonText: result.buttonText,
+                completion: { [weak self] in
+                    guard let self = self else { return }
+                    self.presenter.restartGame()
+                }
+            )
+        }()
+        self.alertPresent?.showAlert(quiz: mockedAlertModel)
     }
 }
